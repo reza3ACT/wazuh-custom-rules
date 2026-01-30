@@ -1,0 +1,69 @@
+<group name="debug_dvwa,ftp_custom,fim_security">
+
+  <rule id="100201" level="10">
+    <if_sid>31100, 31108</if_sid>
+    <regex ignorecase="yes">UNION|SELECT|INSERT|UPDATE|WAITFOR|BENCHMARK|%27|%22|--|%23</regex>
+    <description>DEBUG: SQL Injection Keyword Detected</description>
+  </rule>
+
+  <rule id="100202" level="10">
+    <if_sid>31100, 31108</if_sid>
+    <regex ignorecase="yes">script|javascript|onerror|onload|alert|document.cookie</regex>
+    <description>DEBUG: XSS Keyword Detected</description>
+  </rule>
+
+  <rule id="100203" level="10">
+    <if_sid>31100, 31108</if_sid>
+    <url>login|brute|index.php</url>
+    <description>DEBUG: Sensitive Page Access (Login/Brute)</description>
+  </rule>
+
+  <rule id="100204" level="10">
+    <if_sid>31100, 31108</if_sid>
+    <regex>%2e%2e/|%2e%2e%2f|/etc/passwd|/etc/shadow|c:\\windows</regex>
+    <description>DEBUG: Directory Traversal Pattern</description>
+  </rule>
+
+  <rule id="100300" level="10">
+    <if_sid>86601</if_sid>
+    <field name="alert.signature">SCAN|Nmap|scan|Information</field>
+    <description>DEBUG: Suricata Scan Event</description>
+  </rule>
+
+  <rule id="100400" level="12">
+    <if_sid>11403</if_sid>
+    <description>SOC CUSTOM: FTP Login Failed (Potential Brute Force) from $(srcip)</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+    <group>authentication_failed,</group>
+  </rule>
+
+  <rule id="100401" level="8">
+    <if_sid>11402</if_sid>
+    <description>SOC CUSTOM: FTP Successful Login User $(user) from $(srcip)</description>
+    <mitre>
+      <id>T1078</id>
+    </mitre>
+  </rule>
+
+  <rule id="100500" level="10">
+    <if_sid>554</if_sid>
+    <field name="file">\.php$|\.php5$|\.phtml$</field>
+    <description>FIM: Dangerous PHP File Created/Uploaded: $(file)</description>
+    <mitre>
+      <id>T1505.003</id>
+    </mitre>
+    <group>syscheck,webshell_detection,</group>
+  </rule>
+
+  <rule id="100501" level="10">
+    <if_sid>550</if_sid>
+    <field name="file">\.php$</field>
+    <description>FIM: Existing PHP File Modified: $(file)</description>
+    <mitre>
+      <id>T1505.003</id>
+    </mitre>
+  </rule>
+
+</group>
